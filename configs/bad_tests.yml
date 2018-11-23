@@ -1,0 +1,5 @@
+invalid_option:
+  patterns:
+    - exact_match: ["is", "are"]
+      invalid: ["no"]
+      pos_match: ["2", "3"]

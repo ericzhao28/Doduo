@@ -1,0 +1,86 @@
+# Example config for a beer ecommerce chatbot.
+
+# Match questions asking for the attribute
+# of a given product.
+# Examples:
+#     What flavor is the stout?
+#     ---> {attribute: flavor, product: the stout}
+#     What color are your chocolate ales?
+#     ---> {attribute: color, product: chocolate ales}
+attribute_question:
+  patterns:
+    - exact_match: ["is", "are"]
+      children:
+        - slot_name: "attribute"
+          rels: ["nsubj"]
+          pos_match: ["noun"]
+          children:
+            - rels: ["det"]
+              pos_match: ["adj"]
+              exact_match: ["which", "what"]
+        - slot_name: "product"
+          rels: ["attr"]
+          pos_match: ["noun"]
+          slot_is_full_phrase: True
+    - exact_match: ["is", "are"]
+      children:
+        - slot_name: "attribute"
+          rels: ["attr"]
+          pos_match: ["noun"]
+          children:
+            - rels: ["det"]
+              pos_match: ["adj"]
+              exact_match: ["which", "what"]
+        - slot_name: "product"
+          rels: ["attr"]
+          pos_match: ["noun"]
+          slot_is_full_phrase: True
+
+# Match questions asking us to recommend
+# or state inventory info.
+# Examples:
+#     Do you recommend any ales?
+#     ---> action: "recommend"
+#     ---> product: "any ales"
+#     Do you have any really old porters?
+#     ---> action: "have"
+#     ---> product: "any really old porters"
+action_request:
+  patterns:
+    - slot_name: "action"
+      pos_match: ["verb"]
+      children:
+        - exact_match: ["do", "can"]
+          rels: ["aux"]
+          pos_match: ["verb"]
+        - exact_match: ["you"]
+          rels: ["nsubj"]
+        - slot_name: "product"
+          pos_match: ["noun"]
+          rels: ["dobj"]
+          slot_is_full_phrase: True
+
+# Match statements of preference.
+# Examples:
+#     I don't drink chocolate ale.
+#     ---> opinion: drink
+#     ---> opinion negation: n't
+#     ---> product: chocolate ale
+#     I hate ale.
+#     ---> opinion: hate
+#     ---> product: ale
+preference_statement:
+  patterns:
+    - slot_name: "opinion"
+      pos_match: ["verb"]
+      soft_match: ["hate", "love", "drink", "disgusting"]
+      children:
+        - slot_name: "opinion negation"
+          rels: ["neg"]
+          optional: True
+        - exact_match: ["I", "we"]
+          rels: ["nsubj"]
+        - slot_name: "product"
+          pos_match: ["noun"]
+          rels: ["dobj"]
+          slot_is_full_phrase: True
