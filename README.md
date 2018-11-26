@@ -50,7 +50,7 @@ to "matches" for templates. In the above example, the sentence "Hello there Gene
 `template1` and `template3` patterns. In the case of template3, we are provided slot values resulting from
 argument-parsing.
 
-## Sample appliation
+## Sample application
 Doduo includes a sample application for a beer chatbot. The config file `configs/beer.yml` looks like:
 ```
 attribute_question:
